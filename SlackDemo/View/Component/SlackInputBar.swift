@@ -10,19 +10,18 @@ import UIKit
 import InputBarAccessoryView
 
 final class SlackInputBar: InputBarAccessoryView {
-    
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         configure()
     }
-    
+
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
-    func configure() {
+
+    func configure(){
         let items = [
-            
             makeButton(named: "plus.circle")
                 .onSelected {
                     $0.tintColor = .systemBlue
@@ -30,7 +29,6 @@ final class SlackInputBar: InputBarAccessoryView {
                     imagePicker.delegate = self
                     imagePicker.sourceType = .photoLibrary
                     (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate)?.window?.rootViewController?.present(imagePicker, animated: true, completion: nil)
-                    
                 },
             makeButton(named: "textformat")
                 .onSelected {
@@ -65,11 +63,9 @@ final class SlackInputBar: InputBarAccessoryView {
                 }
         ]
         items.forEach { $0.tintColor = .lightGray }
-        
         // We can change the container insets if we want
         inputTextView.textContainerInset = UIEdgeInsets(top: 8, left: 0, bottom: 8, right: 0)
         inputTextView.placeholderLabelInsets = UIEdgeInsets(top: 8, left: 5, bottom: 8, right: 5)
-        
         let maxSizeItem = InputBarButtonItem()
             .configure {
                 $0.image = UIImage(systemName: "arrow.down.left.and.arrow.up.right.rectangle")?.withRenderingMode(.alwaysTemplate)
@@ -83,13 +79,11 @@ final class SlackInputBar: InputBarAccessoryView {
         rightStackView.alignment = .top
         setStackViewItems([maxSizeItem], forStack: .right, animated: false)
         setRightStackViewWidthConstant(to: 20, animated: false)
-        
         // Finally set the items
         setStackViewItems(items, forStack: .bottom, animated: false)
-        
         shouldAnimateTextDidChangeLayout = true
     }
-    
+
     private func makeButton(named: String) -> InputBarButtonItem {
         return InputBarButtonItem()
             .configure {
@@ -104,11 +98,9 @@ final class SlackInputBar: InputBarAccessoryView {
                 print("Item Tapped")
             }
     }
-    
 }
 
 extension SlackInputBar: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
-    
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         // Local variable inserted by Swift 4.2 migrator.
         let info = convertFromUIImagePickerControllerInfoKeyDictionary(info)

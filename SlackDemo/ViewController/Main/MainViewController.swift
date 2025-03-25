@@ -161,7 +161,10 @@ extension MainViewController: InputBarAccessoryViewDelegate {
             DispatchQueue.main.async { [weak self] in
                 inputBar.sendButton.stopAnimating()
                 inputBar.inputTextView.placeholder = "Message #general"
-                self?.vm?.conversation?.messages.append(Message(user: SampleDataService.shared.currentUser, text: text))
+                guard let currentUser = self?.vm?.getCurrentUser() else {
+                    return
+                }
+                self?.vm?.conversation?.messages.append(Message(user: currentUser, text: text))
                 let indexPath = IndexPath(row: (self?.vm?.conversation?.messages.count ?? 1) - 1, section: 0)
                 self?.messageView.insertRows(at: [indexPath], with: .automatic)
                 self?.messageView.scrollToRow(at: indexPath, at: .bottom, animated: true)
@@ -238,7 +241,7 @@ extension MainViewController: AutocompleteManagerDelegate, AutocompleteManagerDa
         
         if prefix == "@" {
             return self.vm?.conversation?.users
-                .filter { $0.name != SampleDataService.shared.currentUser.name }
+                .filter { $0.name != vm?.getCurrentUser().name }
                 .map { user in
                     return AutocompleteCompletion(text: user.name,
                                                   context: ["id": user.id])
@@ -250,11 +253,12 @@ extension MainViewController: AutocompleteManagerDelegate, AutocompleteManagerDa
     }
     
     func autocompleteManager(_ manager: AutocompleteManager, tableView: UITableView, cellForRowAt indexPath: IndexPath, for session: AutocompleteSession) -> UITableViewCell {
-        
         guard let cell = tableView.dequeueReusableCell(withIdentifier: AutocompleteCell.reuseIdentifier, for: indexPath) as? AutocompleteCell else {
             fatalError("Oops, some unknown error occurred")
         }
-        let users = SampleDataService.shared.users
+        guard let users = vm?.getAllUsers() else {
+            fatalError("Oops, some unknown error occurred")
+        }
         let name = session.completion?.text ?? ""
         let user = users.filter { return $0.name == name }.first
         cell.imageView?.image = user?.image

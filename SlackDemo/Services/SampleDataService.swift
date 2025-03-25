@@ -8,12 +8,12 @@
 import UIKit
 
 protocol SampleDataServicing {
-    func getConversations(count: Int) ->[Conversation]
+    func getConversations(count: Int) -> [Conversation]
+    func getAllUsers() -> [User]
+    func getCurrentUser() -> User
 }
 
 class SampleDataService: SampleDataServicing {
-    
-    static var shared = SampleDataService()
     
     let users = [
         User(name: "Avatar", image: UIImage(systemName: "person.fill")!),
@@ -24,12 +24,10 @@ class SampleDataService: SampleDataServicing {
     ]
     
     var currentUser: User { return users.last! }
-    
+
     func getConversations(count: Int) -> [Conversation] {
-        
         var conversations = [Conversation]()
         for _ in 0..<count {
-            
             var messages = [Message]()
             for i in 0..<30 {
                 let user = users[i % users.count]
@@ -45,5 +43,13 @@ class SampleDataService: SampleDataServicing {
             conversations.append(newConversation)
         }
         return conversations
+    }
+    
+    func getAllUsers() -> [User] {
+        return users
+    }
+    
+    func getCurrentUser() -> User {
+        return currentUser
     }
 }

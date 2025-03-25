@@ -9,12 +9,12 @@
 import UIKit
 
 class User {
-        let id: String = UUID().uuidString
-        let image: UIImage
-        let name: String
-        
-        init(name: String, image: UIImage) {
-            self.image = image
-            self.name = name
-        }
+    let id: String = UUID().uuidString
+    let image: UIImage
+    let name: String
+    
+    init(name: String, image: UIImage) {
+        self.image = image
+        self.name = name
     }
+}
